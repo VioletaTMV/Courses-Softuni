@@ -15,6 +15,7 @@ target/
 build/
 *.iml
 *.xml
+.gitignore
 
 #up to here are the ones added by me
 

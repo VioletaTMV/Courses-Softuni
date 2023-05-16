@@ -1,1 +1,0 @@
-Here I will upload code for solutions to problems in the MySQL module from the JavaDB course at SoftUni
