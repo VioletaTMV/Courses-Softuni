@@ -2,7 +2,7 @@ import java.sql.*;
 import java.util.Properties;
 import java.util.Scanner;
 
-public class DBappsIntro {
+public class _02_GetVillainsNames {
 
     private static final String SELECT_VILLAINS_AND_NUMBER_OF_MINIONS =
             "SELECT " +

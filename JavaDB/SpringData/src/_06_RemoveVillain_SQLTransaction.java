@@ -1,7 +1,7 @@
 import java.sql.*;
 import java.util.Scanner;
 
-public class _06_RemoveVillain {
+public class _06_RemoveVillain_SQLTransaction {
 
     private static final String SELECT_COUNT_OF_MINIONS_HELD_BY_VILLAIN_ID =
             "SELECT count(*) " +
@@ -9,8 +9,8 @@ public class _06_RemoveVillain {
                     "WHERE villain_id = ?;";
 
     private static final String CREATE_TRANSACTION_DELETE_VILLAIN_AND_RELEASE_HIS_MINIONS =
-        //    "DELIMITER $$ " +
-                    "CREATE PROCEDURE delete_villain_and_release_minions (v_id INT) " +
+            //    "DELIMITER $$ " +
+            "CREATE PROCEDURE delete_villain_and_release_minions (v_id INT) " +
                     "BEGIN " +
                     "START TRANSACTION; " +
                     "IF(SELECT count(*) FROM villains WHERE id = v_id <> 1) " +
@@ -22,14 +22,14 @@ public class _06_RemoveVillain {
                     "COMMIT; " +
                     "ELSE ROLLBACK; " +
                     "END IF; " +
-                    "END " ;
+                    "END ";
 //                            "$$ " +
 //                    "DELIMITER ;";
 
     private static final String CALL_PROCEDURE = "CALL delete_villain_and_release_minions(?);";
 
     private static final String SELECT_VILLAIN_BY_ID =
-                    "SELECT * " +
+                     "SELECT * " +
                     "FROM villains " +
                     "WHERE id = ?;";
 
@@ -51,7 +51,7 @@ public class _06_RemoveVillain {
         int countOfMinionsOfVillain = getCountMinions(connection, villainID);
         String villainName = getVillainName(connection, villainID);
 
-        if (villainName == null){
+        if (villainName == null) {
             System.out.println(PRINT_FORMAT_NO_VILLAIN);
         } else {
             deleteVillainAndReleaseMinions(connection, villainID);

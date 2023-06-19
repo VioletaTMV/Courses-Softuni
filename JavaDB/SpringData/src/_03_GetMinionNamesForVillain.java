@@ -2,7 +2,7 @@ import java.sql.*;
 import java.util.Properties;
 import java.util.Scanner;
 
-public class _03_GetMinionNames {
+public class _03_GetMinionNamesForVillain {
 
     private static final String minionNamesAndAgeForVillainID =
             "SELECT " +
