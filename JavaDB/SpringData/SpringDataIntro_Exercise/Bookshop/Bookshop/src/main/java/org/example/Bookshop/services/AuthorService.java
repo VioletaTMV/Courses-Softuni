@@ -17,4 +17,10 @@ public interface AuthorService {
     Map<Author, Integer> getAuthorsAndTheirBookCount();
 
     Author findAuthorByFirstAndLastname(String firstName, String lastName);
+
+    void printAuthorsWhoseFirstNameEndsWith(String input);
+
+    void printAuthorsWithTheirBookCopiesNumber();
+
+    void printNumberOfBooksWrittenBy(String fullName);
 }

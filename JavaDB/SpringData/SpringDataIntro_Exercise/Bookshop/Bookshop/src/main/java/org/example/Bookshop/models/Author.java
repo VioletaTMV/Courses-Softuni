@@ -19,7 +19,7 @@ public class Author {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @OneToMany(mappedBy = "author", targetEntity = Book.class, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "author", targetEntity = Book.class)
     private Set<Book> books;
 
     public Author(){}

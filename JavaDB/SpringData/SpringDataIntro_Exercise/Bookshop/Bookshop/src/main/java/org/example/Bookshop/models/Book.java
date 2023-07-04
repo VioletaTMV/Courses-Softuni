@@ -24,28 +24,28 @@ public class Book {
     private String description;
 
     @Enumerated
-    @Column(name = "edition_type", length = 11, nullable = false)
+    @Column(name = "edition_type", nullable = false)
     private EditionType editionType;
 
     @Column(nullable = false, scale = 2, precision = 19)
     private BigDecimal price;
 
-    @Column(length = 11, nullable = false)
+    @Column(nullable = false)
     private int copies;
 
     @Column(name = "release_date")
     private Date releaseDate;
 
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "age_restriction", length = 11, nullable = false)
+    @Enumerated
+    @Column(name = "age_restriction", nullable = false)
     private AgeRestriction ageRestriction;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "author_id", referencedColumnName = "author_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "author_id", referencedColumnName = "author_id")
     private Author author;
 
 //    @ManyToMany(mappedBy = "books", targetEntity = Category.class)
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "books_categories",
     joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "book_id"),
     inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "category_id"))
@@ -149,14 +149,11 @@ public class Book {
         return "Book{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
                 ", editionType=" + editionType +
                 ", price=" + price +
                 ", copies=" + copies +
                 ", releaseDate=" + releaseDate +
                 ", ageRestriction=" + ageRestriction +
-                ", author=" + author +
-                ", categories=" + categories +
                 '}';
     }
 }
