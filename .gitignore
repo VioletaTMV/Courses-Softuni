@@ -16,6 +16,11 @@ build/
 *.iml
 *.xml
 .gitignore
+.mvn/*
+mvnw
+mvnw.cmd
+
+
 
 #up to here are the ones added by me
 
