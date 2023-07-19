@@ -33,13 +33,13 @@ public class ConsoleRunner implements CommandLineRunner {
         try {
 
             // 2. Seed the DB
-                 this.seedService.seedDatabase();
+            this.seedService.seedDatabase();
 
             // Query 1 – Products in Range
-                  this.productService.getProductsInRangeWithoutBuyer(BigDecimal.valueOf(500), BigDecimal.valueOf(1000));
+            this.productService.getProductsInRangeWithoutBuyer(BigDecimal.valueOf(500), BigDecimal.valueOf(1000));
 
             // Query 2 – Successfully Sold Products
-                  this.userService.getSellersWithProductsSoldInfoAndTheirBuyer();
+            this.userService.getSellersWithProductsSoldInfoAndTheirBuyer();
 
             // Query 3 – Categories by Products Count
             productService.findByCategoryWithAveragePriceAndTotalRevenuePerPerCategory();

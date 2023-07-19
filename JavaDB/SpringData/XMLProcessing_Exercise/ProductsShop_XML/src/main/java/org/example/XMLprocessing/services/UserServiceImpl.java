@@ -1,14 +1,14 @@
-package org.example.JSONprocessing.services;
+package org.example.XMLprocessing.services;
 
-import com.google.gson.Gson;
-import org.example.JSONprocessing.entities.products.Product;
-import org.example.JSONprocessing.entities.products.SoldProductDTO;
-import org.example.JSONprocessing.entities.products.SoldProductsWithCountDTO;
-import org.example.JSONprocessing.entities.users.User;
-import org.example.JSONprocessing.entities.users.UserWithProductsSoldAndBuyerInfoDTO;
-import org.example.JSONprocessing.entities.users.UsersWithProductsSoldDTO;
-import org.example.JSONprocessing.entities.users.UsersWithProductsSoldWrapperDTO;
-import org.example.JSONprocessing.repositories.UserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
+import jdk.swing.interop.SwingInterOpUtils;
+import org.example.XMLprocessing.entities.products.Product;
+import org.example.XMLprocessing.entities.products.SoldProductDTO;
+import org.example.XMLprocessing.entities.products.SoldProductsWithCountDTO;
+import org.example.XMLprocessing.entities.users.*;
+import org.example.XMLprocessing.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,22 +19,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static org.example.JSONprocessing.constants.ErrorMessages.INVALID_ID;
-import static org.example.JSONprocessing.constants.FilePath.OUTPUT_PATH_2;
-import static org.example.JSONprocessing.constants.FilePath.OUTPUT_PATH_4;
-import static org.example.JSONprocessing.constants.Utils.writeIntoJsonFile;
+import static org.example.XMLprocessing.constants.ErrorMessages.INVALID_ID;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private Gson gson;
     private UserRepository userRepository;
     private ModelMapper modelMapper;
 
+    @PersistenceContext
+    EntityManager entityManager;
+
     @Autowired
-    public UserServiceImpl(Gson gson, UserRepository userRepository, ModelMapper modelMapper) {
-        this.gson = gson;
+    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
     }
@@ -62,9 +61,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public List<UserWithProductsSoldAndBuyerInfoDTO> getSellersWithProductsSoldInfoAndTheirBuyer() throws IOException {
+    public UserWithProductsSoldAndBuyerInfoWrapperDTO getSellersWithProductsSoldInfoAndTheirBuyer() throws IOException {
 
-        List<User> usersByProductsSoldNotNull = userRepository.findByProductsSoldBuyerNotNullOrderByLastNameAscFirstNameAsc();
+        List<User> usersByProductsSoldNotNull = userRepository.findByProductsSoldBuyerIsNotNullOrderByLastNameAscFirstNameAsc();
 
         usersByProductsSoldNotNull.forEach(user -> {
             Set<Product> productsToSell = user.getProductsSold();
@@ -76,13 +75,9 @@ public class UserServiceImpl implements UserService {
                 .map(user -> modelMapper.map(user, UserWithProductsSoldAndBuyerInfoDTO.class))
                 .toList();
 
-        String jsonReady = gson.toJson(userWithProductsSoldAndBuyerInfoDTOS);
-        System.out.println(jsonReady);
+        UserWithProductsSoldAndBuyerInfoWrapperDTO userWithProductsSoldAndBuyerInfoWrapperDTO = new UserWithProductsSoldAndBuyerInfoWrapperDTO(userWithProductsSoldAndBuyerInfoDTOS);
 
-        //и принтиране във файл също
-        writeIntoJsonFile(jsonReady, OUTPUT_PATH_2);
-
-        return userWithProductsSoldAndBuyerInfoDTOS;
+        return userWithProductsSoldAndBuyerInfoWrapperDTO;
 
 
     }
@@ -109,14 +104,7 @@ public class UserServiceImpl implements UserService {
                 })
                 .toList();
 
-          UsersWithProductsSoldWrapperDTO usersWithCount = new UsersWithProductsSoldWrapperDTO(usersWithProductsSoldDTOS);
-
-        String jsonReadyUsersWithCount = gson.toJson(usersWithCount);
-
-        System.out.println(jsonReadyUsersWithCount);
-
-        //и принтираме във файл също
-        writeIntoJsonFile(jsonReadyUsersWithCount, OUTPUT_PATH_4);
+        UsersWithProductsSoldWrapperDTO usersWithCount = new UsersWithProductsSoldWrapperDTO(usersWithProductsSoldDTOS);
 
         return usersWithCount;
     }

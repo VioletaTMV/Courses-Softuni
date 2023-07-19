@@ -137,7 +137,7 @@ public class SeedServiceImpl implements SeedService {
         User randomBuyer = getRandomUser();
 
         while (randomBuyer.equals(product.getSeller())){
-            addRandomBuyer(product);
+            randomBuyer = getRandomUser();
         }
 
         product.setBuyer(randomBuyer);
