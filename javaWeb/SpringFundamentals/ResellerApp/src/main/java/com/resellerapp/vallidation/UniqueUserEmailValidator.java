@@ -1,0 +1,22 @@
+package com.resellerapp.vallidation;
+
+import com.resellerapp.service.AuthServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
+public class UniqueUserEmailValidator implements ConstraintValidator<UniqueUserEmail, String> {
+
+    private AuthServiceImpl userService;
+
+    @Autowired
+    public UniqueUserEmailValidator(AuthServiceImpl userService) {
+        this.userService = userService;
+    }
+
+    @Override
+    public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
+        return this.userService.findByEmail(s).isEmpty();
+    }
+}
